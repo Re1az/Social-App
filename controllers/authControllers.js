@@ -1,15 +1,15 @@
 import { User } from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
+import TryCatch from "../utils/TryCatch.js";
 import getDataUrl from "../utils/urlGenerator.js";
 import bcrypt from 'bcrypt';
 import cloudinary from "cloudinary";
 
 
-export const registerUser=async(req,res)=>{
-  // console.log('register hit');
-  // console.log('body:',req.body);
-  // console.log('file:',req.file);
-  try{
+export const registerUser=TryCatch(async(req,res)=>{
+  console.log("Register hit");
+  console.log("Body:",req.body);
+  console.log("file:",req.file);
     const{name,email,password,bio}=req.body;
 
     const file=req.file;
@@ -60,11 +60,31 @@ export const registerUser=async(req,res)=>{
     //   token
     // })
 
+})
 
-  }
-  catch(err){
-    res.status(500).json({
-      message:err.message
-    })
-  }
-};
+export const loginUser=TryCatch(async(req,res)=>{
+  console.log("body:",req.body);
+  const {email,password}=req.body;
+  const user=await User.findOne({email});
+
+  if(!user)return res.status(400).json({
+    message:"Invalid Credentials.Try again"
+  });
+  const comparePassword=await bcrypt.compare(password,user.password);
+  if(!comparePassword)
+    return res.status(400).json({
+    message:"Invalid  Credentials"
+  })
+  generateToken(user._id,res);
+  res.json({
+    message:"Login successful",
+    user,
+  })
+
+})
+export const logoutUser=TryCatch((req,res)=>{
+  res.cookie('jwt',null,{expires:new Date(Date.now()),httpOnly:true});
+  res.status(200).json({
+    message:"Logout successful"
+  })
+})

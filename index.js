@@ -3,6 +3,7 @@ import express from 'express';
 import mongoose, { mongo } from 'mongoose';
 import dotenv from 'dotenv';
 import cloudinary from 'cloudinary';
+import cookieParser from 'cookie-parser'
 
 //importing routes and handlers
 import postRoutes from './routes/postRoutes.js';
@@ -22,8 +23,9 @@ cloudinary.v2.config({
 });
 
 const app =express();
-//usning middleware
+//using middleware
 app.use(express.json());
+app.use(cookieParser());
 
 //Register API routes
 app.use('/api/posts',postRoutes);
