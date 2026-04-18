@@ -20,7 +20,17 @@ const userSchema=new mongoose.Schema({
   profilePic:{
     id:String,
     url:String,
-  }
+  },
+  followers:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User"
+    
+  }],
+  followings:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User"
+    
+  }]
 },{
   timestamps:true
 });
