@@ -2,6 +2,9 @@
 import mongoose from "mongoose";
 import { User } from "../models/userModel.js";
 import TryCatch from "../utils/TryCatch.js";
+import getDataUrl from "../utils/urlGenerator.js";
+import cloudinaery from "cloudinary";
+import bcrypt from "bcrypt";
 
 export const myProfile=TryCatch(async(req,res)=>{
   // console.log(req.user);
@@ -79,5 +82,56 @@ export const userFollowersandFollowingData=TryCatch(async(req,res)=>{
     message:"Followers and following",
     followers,
     followings
+  })
+});
+
+export const updateProfile=TryCatch(async(req,res)=>{
+  const user=await User.findById(req.user._id);
+  const {name,bio}=req.body;
+  if (name){
+    user.name=name;
+  }
+  if (bio){
+    user.bio=bio;
+  }
+  const file=req.file;
+  if(file){
+    const fileUrl=getDataUrl(file);
+    await cloudinaery.v2.uploader.destroy(user.profilePic.id);
+    const myCloud=await cloudinaery.v2.uploader.upload(fileUrl.content);
+    user.profilePic={
+      id:myCloud.public_id,
+      url:myCloud.secure_url
+    }
+  }
+  await user.save();
+  res.status(200).json({
+    message:"Profile updated",
+    user
+  })
+
+  
+});
+
+export const updatePassword=TryCatch(async(req,res)=>{
+  const user=await User.findById(req.user._id);
+  const {oldPassword,newPassword}=req.body;
+  const comparePassword=await bcrypt.compare(oldPassword,user.password);
+  if(!comparePassword){
+    return res.status(400).json({
+      message:"Old password is incorrect"
+    })
+  }
+  if(oldPassword===newPassword){
+    return res.status(400).json({
+      message:"New password cannot be same as old password"
+    })
+  }
+
+  const hashPassword=await bcrypt.hash(newPassword,10);
+  user.password=hashPassword;
+  await user.save();
+  res.status(200).json({
+    message:"Password updated"
   })
 })
