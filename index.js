@@ -4,6 +4,7 @@ import mongoose, { mongo } from 'mongoose';
 import dotenv from 'dotenv';
 import cloudinary from 'cloudinary';
 import cookieParser from 'cookie-parser'
+import cors from 'cors';
 
 //importing routes and handlers
 import postRoutes from './routes/postRoutes.js';
@@ -26,6 +27,7 @@ const app =express();
 //using middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors()); 
 
 //Register API routes
 app.use('/api/posts',postRoutes);

@@ -140,3 +140,85 @@ export const updatePost = TryCatch(async (req, res) => {
     post
   });
 });
+
+export const likeUnlike=TryCatch(async(req,res)=>{
+  const post = await Post.findById(req.params.id);
+
+  if (!post) {
+    return res.status(404).json({
+      message: "Post not found"
+    });
+  }
+
+  if (post.likes.includes(req.user._id)) {
+    const index = post.likes.indexOf(req.user._id);
+    post.likes.splice(index, 1);
+    await post.save();
+    res.status(200).json({
+      message: "Post unliked successfully"
+    });
+  } else {
+    post.likes.push(req.user._id);
+    await post.save();
+    res.status(200).json({
+      message: "Post liked successfully"
+    });
+  }
+})
+
+export const commentonPost=TryCatch(async(req,res)=>{
+  const post=await Post.findById(req.params.id);
+  if (!post) {
+    return res.status(404).json({
+      message: "Post not found"
+    });
+  }
+  const comment={
+    user:req.user._id,
+    name:req.user.name,
+    comment:req.body.comment
+  }
+  post.comments.push(comment);
+  await post.save();
+  res.status(200).json({
+    message:"Commented on post successfully"
+  })
+})
+export const deleteComment = TryCatch(async (req, res) => {
+  if (!req.body.commentId) {
+    return res.status(400).json({
+      message: "commentId is required"
+    });
+  }
+
+  const post = await Post.findById(req.params.id);
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+
+  const commentIndex = post.comments.findIndex(
+    (item) => item._id?.toString() === req.body.commentId.toString()
+  );
+
+  if (commentIndex === -1) {
+    return res.status(404).json({ message: "Comment not found" });
+  }
+
+  const comment = post.comments[commentIndex];
+
+  if (
+    comment.owner?.toString() === req.user?._id?.toString() ||
+    comment.user?.toString() === req.user?._id?.toString()
+  ) {
+    post.comments.splice(commentIndex, 1);
+    await post.save();
+
+    return res.status(200).json({
+      message: "Comment deleted successfully"
+    });
+  }
+
+  return res.status(401).json({
+    message: "You cannot delete this comment"
+  });
+});

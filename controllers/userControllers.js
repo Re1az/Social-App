@@ -48,9 +48,9 @@ export const followandunfollowUser=TryCatch(async(req,res)=>{
         message:"You cannot follow yourself"
       })
     if (user.followers.includes(loggedInUser._id)){
-      const indexFollowing=loggedInUser.follwing.indexOf(user._id);
+      const indexFollowing=loggedInUser.followings.indexOf(user._id);
       const indexFollowers=user.followers.indexOf(loggedInUser._id);
-      loggedInUser.follwing.splice(indexFollowing,1);
+      loggedInUser.followings.splice(indexFollowing,1);
       await loggedInUser.save();
       user.followers.splice(indexFollowers,1);
       await user.save();
