@@ -8,10 +8,10 @@ export default function Header() {
         <h1>Social App</h1>
         <nav className=" flex gap-5">
          <NavLink to="/login">
-         <Button variant="outline" className="p-5 overflow-hidden text-white bg-transparent hover:bg-white hover:text-black">Login</Button></NavLink>
+         <Button  className="p-5 border-none bg-white overflow-hidden  text-black hover:text-white  hover:bg-black">Login</Button></NavLink>
           
         <NavLink to="/register">
-          <Button className="p-5 text-white bg-blue-500 hover:bg-white hover:text-black">Signup</Button></NavLink>
+          <Button className="p-5 text-white bg-blue-500 hover:bg-white hover:text-black">Register</Button></NavLink>
         
         </nav>
       </div>
