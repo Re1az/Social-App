@@ -1,9 +1,14 @@
+
+import AppSidebar from "../../components/AppSidebar.jsx";
 import Post from "../post/Post.jsx";
 
 export default function Home() {
   return (
-    <div>
-      <Post/>
+    <div className="">
+      
+        <Post/>
+      
+      
     </div>
   )
 }

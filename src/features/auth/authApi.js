@@ -15,8 +15,14 @@ import { mainApi } from "../../app/mainApi.js";
         method:"POST",
         body:q
       })
+    }),
+    logoutUser:builder.mutation({
+      query:()=>({
+        url:"/auth/logout",
+        method:"GET"
+      })
     }) 
   })
  })
 
- export const{useLoginUserMutation,useRegisterUserMutation}=authApi
+ export const{useLoginUserMutation,useRegisterUserMutation,useLogoutUserMutation}=authApi

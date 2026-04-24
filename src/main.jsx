@@ -10,7 +10,7 @@ createRoot(document.getElementById('root')).render(
   <Provider store={store}>
 
     <App />
-    <Toaster position="top-center"
+    <Toaster position="top-right"
     toastOptions={{
       duration: 5000
     }}

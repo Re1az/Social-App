@@ -6,6 +6,6 @@ const mainUrl=`${baseUrl}/api`;
 export const mainApi=createApi({
   reducerPath:'mainApi',
   baseQuery:fetchBaseQuery({baseUrl:mainUrl,credentials:'include'}),
-  
+  tagTypes: ["Posts"],
   endpoints:(builder)=>({}),
 })
