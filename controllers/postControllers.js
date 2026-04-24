@@ -1,40 +1,61 @@
+import { populate } from "dotenv";
 import { Post } from "../models/postModel.js";
 import TryCatch from "../utils/TryCatch.js";
 import getDataUrl from "../utils/urlGenerator.js";
 import cloudinary from "cloudinary";
+export const createPost = TryCatch(async (req, res) => {
+  const { caption } = req.body;
+  const ownerId = req.user._id;
+  const file = req.file;
 
-export const createPost=TryCatch(async(req,res)=>{
-  const {caption}=req.body;
-  const ownerId=req.user._id;
-  const file=req.file;
-  let postData={};
-  let type="text";//default
-  if (file){
-    const fileUrl=getDataUrl(file);
-    const isVideo=req.query.type==="video";
-    const myCloud=await cloudinary.v2.uploader.upload(fileUrl.content,{resource_type: isVideo ? "video" : "image"});
-    postData={
-      public_id:myCloud.public_id,
-      url:myCloud.secure_url
-    }
-    type=isVideo?"video":"image";
-    
+  let postData = null;
+  let type = "text";
+
+  if (file) {
+    const fileUrl = getDataUrl(file);
+
+    const myCloud = await cloudinary.v2.uploader.upload(
+      fileUrl.content,
+      {
+        resource_type: "auto",
+      }
+    );
+
+    postData = {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    };
+
+    type = file.mimetype.startsWith("video") ? "video" : "image";
   }
-  
 
-  
-  const post=await Post.create({
+  const post = await Post.create({
     caption,
-    post:file?postData:undefined,
-    owner:ownerId,
+    post: postData,
+    owner: ownerId,
     type,
-  })
-  console.log(post);
+  });
+
   res.status(201).json({
-    message:"Post created successfully",
-    post
-  })
-})
+    message: "Post created successfully",
+    post,
+  });
+});
+
+export const getUserPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({ owner: req.params.id })
+      .populate("owner", "name profilePic",).select("-password");
+res.status(200).json({
+  message:"User Posts fetched",
+  posts
+});
+    // res.json(posts);
+   
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 export const deletePost=TryCatch(async(req,res)=>{
   console.log(req.params.id)
@@ -58,9 +79,9 @@ if(!post)
 });
 
 export const getAllPosts=TryCatch(async(req,res)=>{
-  const posts=await Post.find().sort({createdAt:-1}).limit(20).populate("owner","-password").populate("comments.user","-password");
+  const posts=await Post.find().sort({createdAt:-1}).limit(20).populate("owner","-password").populate("comments.user","-password")
   res.status(200).json({
-    message:"Posts fetched successfully",
+    message:"Posts fetched",
     posts
   })
 })

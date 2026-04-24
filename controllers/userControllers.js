@@ -5,10 +5,11 @@ import TryCatch from "../utils/TryCatch.js";
 import getDataUrl from "../utils/urlGenerator.js";
 import cloudinaery from "cloudinary";
 import bcrypt from "bcrypt";
+import {Post} from "../models/postModel.js";
 
 export const myProfile=TryCatch(async(req,res)=>{
   // console.log(req.user);
-  const user=await User.findById(req.user._id).select('-password');
+  const user=await User.findById(req.user._id).select('-password')
   // console.log(typeof user.email);
 
   res.status(200).json({
@@ -16,6 +17,7 @@ export const myProfile=TryCatch(async(req,res)=>{
     user
   })
 })
+
 
 export const userProfile=TryCatch(async(req,res)=>{
 
@@ -60,7 +62,7 @@ export const followandunfollowUser=TryCatch(async(req,res)=>{
     
       
     }else{
-      loggedInUser.follwing.push(user._id);
+      loggedInUser.followings.push(user._id);
       await loggedInUser.save();
       user.followers.push(loggedInUser._id);
       await user.save();
