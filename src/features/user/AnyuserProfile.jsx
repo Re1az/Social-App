@@ -2,9 +2,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar.
 import { useGetUserQuery } from "./userApi.js";
 import { useSelector } from "react-redux";
 import UserPost from "../post/UserPost.jsx";
+import { useGetUserPostsQuery } from "../post/postApi.js";
 
-export default function UserProfile() {
+export default function AnyuserProfile() {
   const {data,isLoading,error}=useGetUserQuery();
+  
+  
+  
   // const{user}=useSelector((state)=>state.userSlice);
   // console.log(user);
   // console.log(data);

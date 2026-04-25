@@ -1,25 +1,32 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useGetUserPostsQuery } from "./postApi";
 
 export default function UserPost({ user }) {
+  const nav = useNavigate();
+
   const { data, isLoading } = useGetUserPostsQuery(user?._id, {
     skip: !user?._id,
   });
+  
 
-  const posts = data?.posts; // 👈 IMPORTANT FIX
-    const videoRefs = useRef({}); // store multiple video refs
-    const [mutedStates, setMutedStates] = useState({});
+  const posts = data?.posts;
+  const videoRefs = useRef({});
+  const [mutedStates, setMutedStates] = useState({});
+
   if (!user) return <p className="text-center">Loading user...</p>;
   if (isLoading) return <p className="text-center">Loading posts...</p>;
+
+  const openPost = (id) => {
+    nav(`/post/${id}`);
+  };
+
   const togglePlay = (id) => {
     const video = videoRefs.current[id];
     if (!video) return;
 
-    if (video.paused) {
-      video.play();
-    } else {
-      video.pause();
-    } 
+    if (video.paused) video.play();
+    else video.pause();
   };
 
   const toggleMute = (e, id) => {
@@ -37,24 +44,26 @@ export default function UserPost({ user }) {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-1  mt-5 p-10">
+    <div className="grid grid-cols-3 gap-1 mt-5 p-10">
 
       {posts?.length > 0 ? (
         posts.map((post) => (
-          <div key={post._id} className="relative shadow-2xl hover:transform hover:shadow-xl hover:scale-[1.01] hover:border-2 border-gray-400 hover:autoPlay">
+          <div
+            key={post._id}
+            onClick={() => openPost(post._id)}
+            className="cursor-pointer relative shadow-2xl hover:scale-[1.01] transition"
+          >
 
-            {/* IMAGE / VIDEO HANDLING */}
             {post.post?.url ? (
               post.type === "video" ? (
                 <video
-                    ref={(el) => (videoRefs.current[post._id] = el)}
-                    muted
-                    loop
-                    playsInline
-                    src={post.post?.url}
-                    className=" w-full aspect-square object-cover"
-                    // onClick={() => togglePlay(post._id)}
-                  />
+                  ref={(el) => (videoRefs.current[post._id] = el)}
+                  muted
+                  loop
+                  playsInline
+                  src={post.post.url}
+                  className="w-full aspect-square object-cover"
+                />
               ) : (
                 <img
                   src={post.post.url}
@@ -63,17 +72,10 @@ export default function UserPost({ user }) {
                 />
               )
             ) : (
-              <div className="w-full aspect-square bg-gray-200 flex items-center justify-center text-sm text-gray-600">
+              <div className="w-full aspect-square bg-gray-200 flex items-center justify-center">
                 No Media
               </div>
             )}
-
-            {/* OPTIONAL CAPTION OVERLAY */}
-            {/* {post.caption && (
-              <div className="absolute bottom-0 w-full bg-black/50 text-white text-xs p-1 truncate">
-                {post.caption}
-              </div>
-            )} */}
 
           </div>
         ))

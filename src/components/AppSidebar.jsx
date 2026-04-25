@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   Home,
   Search,
@@ -8,9 +8,14 @@ import {
 } from "lucide-react";
 import Logout from "../features/auth/Logout.jsx";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu.jsx";
+
+
   
 
 export default function AppSidebar() {
+  
+
+  const nav = useNavigate(); // ✅ MUST call it
   const linkClass =
     "flex items-center gap-4 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition";
 
@@ -68,7 +73,7 @@ export default function AppSidebar() {
           </DropdownMenuTrigger>
            <DropdownMenuContent className="w-55">
         <DropdownMenuGroup className="text-center" >
-          <DropdownMenuItem className="hover:cursor-pointer px-10 ">Update Profile</DropdownMenuItem>
+          <DropdownMenuItem onClick={()=>nav('/updateprofile')} className="hover:cursor-pointer px-10 ">Update Profile</DropdownMenuItem>
           <DropdownMenuItem className="hover:cursor-pointer px-10  ">Change Password</DropdownMenuItem>
           
         </DropdownMenuGroup>

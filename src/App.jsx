@@ -7,6 +7,10 @@ import { Register } from "./features/auth/Register.jsx";
 import Logout from "./features/auth/Logout.jsx";
 import UserProfile from "./features/user/UserProfile.jsx";
 import CreatePost from "./features/post/CreatePost.jsx";
+import UpdateProfile from "./features/user/UpdateProfile.jsx";
+import Comment from "./features/comment/Comment.jsx";
+import SinglePost from "./features/post/SinglePost.jsx";
+import AnyuserProfile from "./features/user/AnyuserProfile.jsx";
 
 export default function App() {
   const router=createBrowserRouter([
@@ -36,6 +40,23 @@ export default function App() {
         },{
           path:'create',
           element:<CreatePost/>
+        },
+        {
+          path:"updateprofile",
+          element:<UpdateProfile/>
+        },
+        {
+          path:"comment/:id",
+          element:<Comment/>
+        },
+        {
+          path:"/post/:id",
+          element:<SinglePost/>
+
+        },
+        {
+          path:"profile/:id",
+          element:<AnyuserProfile/>
         }
       ]
     }
