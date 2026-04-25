@@ -205,6 +205,65 @@ export const commentonPost=TryCatch(async(req,res)=>{
     message:"Commented on post successfully"
   })
 })
+
+export const getPostComments = TryCatch(async (req, res) => {
+  const post = await Post.findById(req.params.id);
+
+  if (!post) {
+    return res.status(404).json({
+      message: "Post not found",
+    });
+  }
+
+  res.status(200).json({
+    message: "Comments fetched successfully",
+    comments: post.comments,
+  });
+});
+
+export const editComment = TryCatch(async (req, res) => {
+  const { commentId, comment } = req.body;
+
+  if (!commentId || !comment) {
+    return res.status(400).json({
+      message: "commentId and comment are required",
+    });
+  }
+
+  const post = await Post.findById(req.params.id);
+
+  if (!post) {
+    return res.status(404).json({
+      message: "Post not found",
+    });
+  }
+
+  const commentData = post.comments.find(
+    (item) => item._id.toString() === commentId.toString()
+  );
+
+  if (!commentData) {
+    return res.status(404).json({
+      message: "Comment not found",
+    });
+  }
+
+  // Only comment owner can edit
+  if (commentData.user.toString() !== req.user._id.toString()) {
+    return res.status(401).json({
+      message: "You cannot edit this comment",
+    });
+  }
+
+  commentData.comment = comment;
+
+  await post.save();
+
+  res.status(200).json({
+    message: "Comment updated successfully",
+    comments: post.comments,
+  });
+});
 export const deleteComment = TryCatch(async (req, res) => {
   if (!req.body.commentId) {
     return res.status(400).json({

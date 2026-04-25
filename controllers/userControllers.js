@@ -26,7 +26,7 @@ export const userProfile=TryCatch(async(req,res)=>{
       message:"Invalid user id"
     })
   const user=await User.findById(req.params.id).select('-password');
-  console.log(user);
+  // console.log(user);
   if(!user)
     return res.status(404).json({
       message:"User not found"
