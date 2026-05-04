@@ -136,4 +136,27 @@ export const updatePassword=TryCatch(async(req,res)=>{
   res.status(200).json({
     message:"Password updated"
   })
-})
+});
+
+export const searchUser = TryCatch(async (req, res) => {
+  const { key } = req.params;
+
+  if (!key) {
+    return res.status(400).json({
+      message: "Keyword is required",
+      users: [],
+    });
+  }
+
+  const users = await User.find({
+  $or: [
+    { name: { $regex: key, $options: "i" } },
+    { username: { $regex: key, $options: "i" } },
+  ],
+}).select("-password");
+
+  res.status(200).json({
+    message: "Users found",
+    users,
+  });
+});

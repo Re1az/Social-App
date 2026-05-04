@@ -21,9 +21,9 @@ import cloudinary from "cloudinary";
 
 export const registerUser=TryCatch(async(req,res)=>{
 //checking what data is coming in
-  console.log("Register hit");
-  console.log("Body:",req.body);
-  console.log("file:",req.file);
+  // console.log("Register hit");
+  // console.log("Body:",req.body);
+  // console.log("file:",req.file);
 //destructuring the data that comes in req.body from front end
     const{name,email,password,bio}=req.body;
 //destructuring the data that comes in req.file from front end
