@@ -8,4 +8,4 @@ export const mainApi=createApi({
   baseQuery:fetchBaseQuery({baseUrl:mainUrl,credentials:'include'}),
   tagTypes: ["Posts","comment","User"],
   endpoints:(builder)=>({}),
-})no
+})
