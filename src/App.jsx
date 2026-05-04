@@ -11,6 +11,8 @@ import UpdateProfile from "./features/user/UpdateProfile.jsx";
 import Comment from "./features/comment/Comment.jsx";
 import SinglePost from "./features/post/SinglePost.jsx";
 import AnyuserProfile from "./features/user/AnyuserProfile.jsx";
+import Search from "./features/search/Search.jsx";
+import ChangePassword from "./features/changepassword/ChangePassword.jsx";
 
 export default function App() {
   const router=createBrowserRouter([
@@ -57,6 +59,14 @@ export default function App() {
         {
           path:"profile/:id",
           element:<AnyuserProfile/>
+        },
+        {
+          path:"search",
+          element:<Search/>
+        },
+        {
+          path:"changepassword",
+          element:<ChangePassword/>
         }
       ]
     }

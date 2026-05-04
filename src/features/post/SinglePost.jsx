@@ -36,11 +36,9 @@ export default function SinglePost() {
 
   const post = data?.post;
 
-  // ================= STATE =================
   const [isEditing, setIsEditing] = useState(false);
   const [caption, setCaption] = useState("");
 
-  // ================= LOADING =================
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen text-gray-500">
@@ -49,7 +47,6 @@ export default function SinglePost() {
     );
   }
 
-  // ================= NOT FOUND =================
   if (!post) {
     return (
       <div className="flex justify-center items-center h-screen text-gray-500">
@@ -60,7 +57,6 @@ export default function SinglePost() {
 
   const isOwner = post.owner?._id === user?._id;
 
-  // ================= DELETE =================
   const handleDelete = async () => {
     const confirmDelete = window.confirm("Delete this post?");
     if (!confirmDelete) return;
@@ -73,7 +69,6 @@ export default function SinglePost() {
     }
   };
 
-  // ================= UPDATE =================
   const handleUpdate = async () => {
     try {
       const formData = new FormData();
@@ -91,35 +86,34 @@ export default function SinglePost() {
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] flex justify-center items-center p-4 relative">
+    <div className="min-h-screen flex items-center justify-center p-3 sm:p-6 bg-gray-50 relative">
 
-      {/* ================= BACK BUTTON ================= */}
+      {/* BACK BUTTON */}
       <button
         onClick={() => nav(-1)}
-        className="absolute top-5 left-5 bg-white/80 backdrop-blur p-2 rounded-full shadow hover:bg-white"
+        className="absolute top-4 left-4 sm:top-6 sm:left-6 bg-white/90 backdrop-blur p-2 rounded-full shadow"
       >
         <ArrowLeft size={20} />
       </button>
 
-      {/* ================= CARD ================= */}
-      <div className="w-full max-w-md bg-white rounded-2xl overflow-hidden shadow-lg">
+      {/* CARD */}
+      <div className="w-full max-w-md sm:max-w-lg md:max-w-xl bg-white rounded-2xl overflow-hidden shadow-lg">
 
-        {/* ================= HEADER ================= */}
-        <div className="flex items-center justify-between p-3 border-b">
+        {/* HEADER */}
+        <div className="flex items-center justify-between p-3 sm:p-4 border-b">
 
           <div className="flex items-center gap-3">
             <img
               src={post.owner?.profilePic?.url}
               alt="user"
-              className="w-9 h-9 rounded-full object-cover"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover"
             />
 
-            <p className="text-sm font-semibold">
+            <p className="text-sm sm:text-base font-semibold">
               {post.owner?.name}
             </p>
           </div>
 
-          {/* 3 DOT MENU */}
           {isOwner && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -129,8 +123,6 @@ export default function SinglePost() {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end">
-
-                {/* EDIT */}
                 <DropdownMenuItem
                   onClick={() => {
                     setIsEditing(true);
@@ -138,49 +130,47 @@ export default function SinglePost() {
                   }}
                 >
                   <Pencil className="mr-2 h-4 w-4" />
-                  Edit Post
+                  Edit
                 </DropdownMenuItem>
 
-                {/* DELETE */}
                 <DropdownMenuItem
                   onClick={handleDelete}
                   className="text-red-500"
                 >
                   <Trash className="mr-2 h-4 w-4" />
-                  Delete Post
+                  Delete
                 </DropdownMenuItem>
-
               </DropdownMenuContent>
             </DropdownMenu>
           )}
         </div>
 
-        {/* ================= MEDIA ================= */}
+        {/* MEDIA */}
         <div className="w-full bg-black">
           {post.type === "video" ? (
             <video
               controls
               src={post.post.url}
-              className="w-full max-h-[500px] object-cover"
+              className="w-full max-h-[60vh] object-contain sm:object-cover"
             />
           ) : (
             <img
               src={post.post.url}
               alt="post"
-              className="w-full max-h-[500px] object-cover"
+              className="w-full max-h-[60vh] object-contain sm:object-cover"
             />
           )}
         </div>
 
-        {/* ================= ACTIONS ================= */}
-        <div className="p-3 space-y-3">
+        {/* ACTIONS */}
+        <div className="p-3 sm:p-4 space-y-3">
 
-          <div className="flex gap-4">
+          <div className="flex gap-5">
             <Heart className="cursor-pointer hover:text-red-500" />
             <MessageCircle className="cursor-pointer hover:text-blue-500" />
           </div>
 
-          {/* ================= CAPTION ================= */}
+          {/* CAPTION */}
           {isEditing ? (
             <div className="space-y-2">
               <input
@@ -189,7 +179,7 @@ export default function SinglePost() {
                 className="w-full border rounded-md p-2 text-sm"
               />
 
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <button
                   onClick={handleUpdate}
                   className="px-3 py-1 bg-black text-white rounded-md text-sm"
@@ -206,14 +196,13 @@ export default function SinglePost() {
               </div>
             </div>
           ) : (
-            <p className="text-sm">
+            <p className="text-sm sm:text-base">
               <span className="font-semibold">
                 {post.owner?.name}{" "}
               </span>
               {post.caption}
             </p>
           )}
-
         </div>
       </div>
     </div>

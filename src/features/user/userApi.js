@@ -19,8 +19,22 @@ const userApi=mainApi.injectEndpoints({
 
       }),
       invalidatesTags: ["User"],
-  })
+  }),
+  getUserProfile:builder.query({
+    query:(id)=>({
+      url:`/users/${id}`,
+      method:"GET"
+    }),
+    providesTags: ["User"],
+  }),
+  followUnfollow:builder.mutation({
+    query:(id)=>({
+      url:`/users/follow/${id}`,
+      method:"POST"
+    }),
+    invalidatesTags: ["User"],
+  }),
 })
 })
 
-export const {useGetUserQuery,useUpdateUserMutation}=userApi;
+export const {useGetUserQuery,useUpdateUserMutation,useGetUserProfileQuery,useFollowUnfollowMutation}=userApi;

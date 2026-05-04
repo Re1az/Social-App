@@ -44,7 +44,7 @@ export default function UserPost({ user }) {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-1 mt-5 p-10">
+    <div className="grid grid-cols-3 gap-1 mt-5 mb-5 ">
 
       {posts?.length > 0 ? (
         posts.map((post) => (

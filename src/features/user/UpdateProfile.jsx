@@ -104,7 +104,7 @@ export default function UpdateProfile() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-4">
+    <div className="flex justify-center items-center h-[calc(100vh-4rem)] p-4">
 
       <Card className="w-full max-w-lg">
 

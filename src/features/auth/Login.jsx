@@ -82,7 +82,7 @@ export function Login() {
   try {
     const response = await loginUser(val).unwrap();
     dispatch(setUser(response));
-    console.log(response)
+  
     toast.success("Login successful");
     nav("/");
   } catch (err) {

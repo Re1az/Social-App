@@ -76,13 +76,15 @@ export default function CreatePost() {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-      <Card className="w-full max-w-xl">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-3 sm:px-6">
+      <Card className="w-full max-w-lg sm:max-w-xl max-h-[90vh] overflow-y-auto">
 
         {/* Header */}
         <CardHeader>
-          <CardTitle>Create a new post</CardTitle>
-          <p className="text-sm text-muted-foreground">
+          <CardTitle className="text-lg sm:text-xl">
+            Create a new post
+          </CardTitle>
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Drag and drop files to upload your post
           </p>
         </CardHeader>
@@ -93,7 +95,7 @@ export default function CreatePost() {
           <div
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
-            className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-muted transition"
+            className="border-2 border-dashed rounded-lg p-4 sm:p-8 text-center cursor-pointer hover:bg-muted transition"
           >
             <input
               type="file"
@@ -103,7 +105,7 @@ export default function CreatePost() {
             />
 
             <label htmlFor="file" className="cursor-pointer block space-y-2">
-              <p className="font-medium">
+              <p className="font-medium text-sm sm:text-base">
                 Drag & Drop or Click to upload
               </p>
 
@@ -111,7 +113,7 @@ export default function CreatePost() {
                 Images & Videos supported
               </p>
 
-              {/* ✅ FILE PREVIEW WITH REMOVE BUTTON */}
+              {/* FILE PREVIEW */}
               {file && (
                 <div className="mt-3 relative">
 
@@ -131,12 +133,12 @@ export default function CreatePost() {
                     <img
                       src={URL.createObjectURL(file)}
                       alt="preview"
-                      className="w-full h-100 object-cover rounded-lg"
+                      className="w-full h-48 sm:h-72 md:h-96 object-cover rounded-lg"
                     />
                   ) : file.type.startsWith("video") ? (
                     <video
                       src={URL.createObjectURL(file)}
-                      className="w-full h-100 object-cover rounded-lg"
+                      className="w-full h-48 sm:h-72 md:h-96 object-cover rounded-lg"
                       controls
                     />
                   ) : (
@@ -153,13 +155,14 @@ export default function CreatePost() {
             </label>
           </div>
 
-          {/* BIO */}
+          {/* CAPTION */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Caption</label>
             <Textarea
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
               placeholder="Write something about your post..."
+              className="text-sm"
             />
             {errors.caption && (
               <p className="text-sm text-red-500">{errors.caption}</p>
@@ -167,14 +170,25 @@ export default function CreatePost() {
           </div>
 
           {/* BUTTONS */}
-          <div className="flex justify-end gap-3">
-            <Button onClick={() => nav(-1)} variant="outline">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
+
+             <Button
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className="w-full sm:w-auto"
+            >
+              {isLoading ? "Uploading..." : "Upload"}
+            </Button>
+            
+            <Button
+              onClick={() => nav(-1)}
+              variant="outline"
+              className="w-full sm:w-auto"
+            >
               Cancel
             </Button>
 
-            <Button onClick={handleSubmit} disabled={isLoading}>
-              {isLoading ? "Uploading..." : "Upload"}
-            </Button>
+           
           </div>
 
         </CardContent>

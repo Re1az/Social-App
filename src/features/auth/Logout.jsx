@@ -39,7 +39,7 @@ export default function Logout() {
     
       <AlertDialog className="">
         <AlertDialogTrigger asChild>
-          <Button  className="flex items-center justify-start p-5 bg-transparent text-red-500 hover:bg-red-300" >
+          <Button  className="flex items-center justify-start p-5 bg-transparent text-red-500 hover:bg-red-300 max-sm:items-center  max-sm:p-0" >
             <LogOutIcon />
             Logout
           </Button>
